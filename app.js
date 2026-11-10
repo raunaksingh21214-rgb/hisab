@@ -808,11 +808,11 @@ function buildReminderMessage(person, templateStyle = "casual") {
 
   if (balance > 0.009) {
     if (templateStyle === "casual") {
-      message = `Hey ${personName}! Quick friendly reminder about ${formattedAmt} pending with you. Whenever you get a moment, please send it over. Thanks! 🙌${fromTag}`;
+      message = `Hey ${personName}! Quick friendly reminder about ${formattedAmt} pending with you. Whenever you get a moment, please send it over. Thanks! https://hisaba.netlify.app 🙌${fromTag}`;
     } else if (templateStyle === "polite") {
-      message = `Dear ${person.name}, this is a gentle reminder regarding the outstanding balance of ${formattedAmt}. Kindly settle this when convenient. Regards${fromTag}.`;
+      message = `Dear ${person.name}, this is a gentle reminder regarding the outstanding balance of ${formattedAmt}. Kindly settle this when convenient. Regards https://hisaba.netlify.app${fromTag}.`;
     } else if (templateStyle === "urgent") {
-      message = `Hi ${personName}, please settle the pending dues of ${formattedAmt} today if possible. Thank you${fromTag}!`;
+      message = `Hi ${personName}, please settle the pending dues of ${formattedAmt} today if possible. Thank you https://hisaba.netlify.app${fromTag}!`;
     } else if (templateStyle === "itemized") {
       const recent = state.entries
         .filter((e) => e.personId === person.id && e.direction === "gave")
@@ -820,7 +820,7 @@ function buildReminderMessage(person, templateStyle = "casual") {
         .map((e) => `• ${formatMoney(e.amount)} (${e.note || e.category})`)
         .join("\n");
 
-      message = `Hi ${personName}, your total pending balance is ${formattedAmt}.\n${recent ? `Recent items:\n${recent}\n` : ""}Please transfer when you can. Thank you${fromTag}!`;
+      message = `Hi ${personName}, your total pending balance is ${formattedAmt}.\n${recent ? `Recent items:\n${recent}\n` : ""}Please transfer when you can. Thank you https://hisaba.netlify.app${fromTag}!`;
     }
 
     if (upiId) {
