@@ -808,11 +808,11 @@ function buildReminderMessage(person, templateStyle = "casual") {
 
   if (balance > 0.009) {
     if (templateStyle === "casual") {
-      message = `Hey ${personName}! Quick friendly reminder about ${formattedAmt} pending with you. Whenever you get a moment, please send it over. Thanks! https://hisaba.netlify.app 🙌${fromTag}`;
+      message = `Hey ${personName}! Quick friendly reminder about ${formattedAmt} pending with you. Whenever you get a moment, please send it over. Thanks! 🙌${fromTag}\n\nTrack records on Hisab: https://hisaba.netlify.app`;
     } else if (templateStyle === "polite") {
-      message = `Dear ${person.name}, this is a gentle reminder regarding the outstanding balance of ${formattedAmt}. Kindly settle this when convenient. Regards https://hisaba.netlify.app${fromTag}.`;
+      message = `Dear ${person.name}, this is a gentle reminder regarding the outstanding balance of ${formattedAmt}. Kindly settle this when convenient. Regards {fromTag}\nHisab App: https://hisaba.netlify.app`;
     } else if (templateStyle === "urgent") {
-      message = `Hi ${personName}, please settle the pending dues of ${formattedAmt} today if possible. Thank you https://hisaba.netlify.app${fromTag}!`;
+      message = `Hi ${personName}, please settle the pending dues of ${formattedAmt} today if possible. Thank you https://hisaba.netlify.app${fromTag}!\n\nHisab App: https://hisaba.netlify.app`;
     } else if (templateStyle === "itemized") {
       const recent = state.entries
         .filter((e) => e.personId === person.id && e.direction === "gave")
