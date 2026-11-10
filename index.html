@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hisab — Money & Expense Tracker with WhatsApp Reminders</title>
+  <meta name="theme-color" content="#0284c7" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-badge">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title-row">
+            <h1>Hisab <span class="brand-tag">App</span></h1>
+            <button type="button" class="profile-pill-btn" id="btn-profile-pill" title="Switch or manage isolated ledgers">
+              <span id="active-profile-icon">👤</span>
+              <span id="active-profile-name">Personal Ledger</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+          <p class="tagline">Personal & multi-user isolated ledger with WhatsApp reminders</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn btn-outline" id="btn-install-app" title="Install Hisab as a standalone app on your phone or PC">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Install App</span>
+        </button>
+        <button type="button" class="btn btn-icon" id="theme-toggle" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+          <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button type="button" class="btn btn-secondary" id="open-settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </button>
+        <button type="button" class="btn btn-primary" id="btn-quick-entry">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Add Transaction
+        </button>
+      </div>
+    </header>
+
+    <!-- Financial Summary Cards -->
+    <section class="summary-grid" aria-label="Financial Summary">
+      <div class="summary-card receive-card">
+        <div class="card-glow"></div>
+        <div class="summary-header">
+          <span class="summary-title">To Receive</span>
+          <span class="summary-icon receive-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+          </span>
+        </div>
+        <strong class="summary-value" id="total-receive">₹0</strong>
+        <p class="summary-subtext">People owe you this amount</p>
+      </div>
+
+      <div class="summary-card pay-card">
+        <div class="card-glow"></div>
+        <div class="summary-header">
+          <span class="summary-title">To Pay</span>
+          <span class="summary-icon pay-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+          </span>
+        </div>
+        <strong class="summary-value" id="total-pay">₹0</strong>
+        <p class="summary-subtext">You owe other people</p>
+      </div>
+
+      <div class="summary-card net-card">
+        <div class="card-glow"></div>
+        <div class="summary-header">
+          <span class="summary-title">Net Balance</span>
+          <span class="summary-icon net-icon" id="net-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
+          </span>
+        </div>
+        <strong class="summary-value" id="total-net">₹0</strong>
+        <p class="summary-subtext" id="net-caption">All settled up</p>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" role="tablist">
+      <button type="button" class="tab-btn active" data-tab="tab-people" role="tab">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        People & Balances (<span id="people-count">0</span>)
+      </button>
+      <button type="button" class="tab-btn" data-tab="tab-feed" role="tab">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Expense & Activity Log (<span id="entries-count">0</span>)
+      </button>
+      <button type="button" class="tab-btn" data-tab="tab-analytics" role="tab">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Breakdown & Analytics
+      </button>
+    </nav>
+
+    <!-- TAB 1: People & Balances -->
+    <section id="tab-people" class="tab-content active">
+      <div class="control-bar">
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="people-search" placeholder="Search by name or mobile number…" autocomplete="off" />
+        </div>
+        <div class="filter-chips">
+          <button type="button" class="chip active" data-filter="all">All Contacts</button>
+          <button type="button" class="chip" data-filter="receive">To Receive (Owes Me)</button>
+          <button type="button" class="chip" data-filter="pay">To Pay (I Owe)</button>
+          <button type="button" class="chip" data-filter="settled">Settled</button>
+        </div>
+        <button type="button" class="btn btn-outline" id="btn-add-person">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          Add Contact
+        </button>
+      </div>
+
+      <div id="people-list" class="cards-grid" aria-live="polite"></div>
+    </section>
+
+    <!-- TAB 2: Activity & Expense Feed -->
+    <section id="tab-feed" class="tab-content">
+      <div class="control-bar">
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="feed-search" placeholder="Search by note, person, or category…" autocomplete="off" />
+        </div>
+        <div class="filter-chips">
+          <button type="button" class="chip active" data-feed-filter="all">All Entries</button>
+          <button type="button" class="chip" data-feed-filter="gave">+ Money Given</button>
+          <button type="button" class="chip" data-feed-filter="got">− Money Received</button>
+        </div>
+        <select id="category-filter" class="select-input">
+          <option value="all">All Categories</option>
+          <option value="🍔 Food & Drinks">🍔 Food & Drinks</option>
+          <option value="🚗 Travel & Fuel">🚗 Travel & Fuel</option>
+          <option value="🏠 Rent & Bills">🏠 Rent & Bills</option>
+          <option value="🛒 Groceries & Shopping">🛒 Groceries & Shopping</option>
+          <option value="🎉 Entertainment">🎉 Entertainment</option>
+          <option value="💸 Loan & Cash">💸 Loan & Cash</option>
+          <option value="🔄 Settle Up">🔄 Settle Up</option>
+          <option value="🏷️ Other">🏷️ Other</option>
+        </select>
+      </div>
+
+      <div id="activity-feed" class="feed-list" aria-live="polite"></div>
+    </section>
+
+    <!-- TAB 3: Analytics & Breakdown -->
+    <section id="tab-analytics" class="tab-content">
+      <div class="analytics-container">
+        <div class="analytics-card">
+          <h3>Spending & Lending Categories</h3>
+          <p class="hint">Where the money was spent or lent across all entries</p>
+          <div id="category-bars" class="bars-container"></div>
+        </div>
+
+        <div class="analytics-card">
+          <h3>Top Balances (Who owes the most)</h3>
+          <p class="hint">Contacts with highest pending amounts to collect</p>
+          <div id="top-borrowers" class="top-list"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- MODAL: Add / Edit Person -->
+  <dialog id="person-dialog" class="custom-dialog">
+    <div class="dialog-header">
+      <h2 id="person-title">Add Contact</h2>
+      <button type="button" class="btn-close" data-close aria-label="Close dialog">×</button>
+    </div>
+    <form id="person-form">
+      <div class="form-group">
+        <label for="person-name-input">Person Name <span class="req">*</span></label>
+        <input id="person-name-input" name="name" required maxlength="60" placeholder="e.g. Rahul Sharma" autocomplete="off" />
+      </div>
+      <div class="form-group">
+        <label for="person-phone-input">Mobile Number (for WhatsApp & SMS)</label>
+        <div class="phone-input-wrapper">
+          <span class="phone-prefix" id="phone-prefix-display">+91</span>
+          <input id="person-phone-input" name="phone" inputmode="tel" placeholder="9876543210" autocomplete="off" />
+        </div>
+        <p class="field-hint">Used to send 1-click WhatsApp and SMS reminders directly to their phone.</p>
+      </div>
+      <div class="form-group">
+        <label for="person-notes-input">Optional Note / Relationship</label>
+        <input id="person-notes-input" name="notes" maxlength="100" placeholder="e.g. Flatmate, Colleague, College Friend" />
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" data-close>Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Contact</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- MODAL: Add / Edit Transaction Entry -->
+  <dialog id="entry-dialog" class="custom-dialog">
+    <div class="dialog-header">
+      <h2 id="entry-title">Record Transaction</h2>
+      <button type="button" class="btn-close" data-close aria-label="Close dialog">×</button>
+    </div>
+    <form id="entry-form">
+      <div class="form-group">
+        <label for="entry-person-select">Select Contact <span class="req">*</span></label>
+        <select id="entry-person-select" name="personId" required class="select-input">
+          <!-- Filled dynamically -->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Transaction Type <span class="req">*</span></label>
+        <div class="segmented-control">
+          <label class="segment-option give-option">
+            <input type="radio" name="direction" value="gave" checked />
+            <span class="segment-label">
+              <span class="symbol">+</span> You Gave / Lent
+              <small>They owe you</small>
+            </span>
+          </label>
+          <label class="segment-option get-option">
+            <input type="radio" name="direction" value="got" />
+            <span class="segment-label">
+              <span class="symbol">−</span> You Got / Received
+              <small>They paid back</small>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label for="entry-amount-input">Amount (<span class="currency-label">₹</span>) <span class="req">*</span></label>
+          <input id="entry-amount-input" name="amount" type="number" step="0.01" min="0.01" required placeholder="500.00" />
+        </div>
+        <div class="form-group flex-1">
+          <label for="entry-date-input">Date <span class="req">*</span></label>
+          <input id="entry-date-input" name="date" type="date" required />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label for="entry-category-select">Category</label>
+          <select id="entry-category-select" name="category" class="select-input">
+            <option value="🍔 Food & Drinks">🍔 Food & Drinks</option>
+            <option value="🚗 Travel & Fuel">🚗 Travel & Fuel</option>
+            <option value="🏠 Rent & Bills">🏠 Rent & Bills</option>
+            <option value="🛒 Groceries & Shopping">🛒 Groceries & Shopping</option>
+            <option value="🎉 Entertainment">🎉 Entertainment</option>
+            <option value="💸 Loan & Cash">💸 Loan & Cash</option>
+            <option value="🔄 Settle Up">🔄 Settle Up</option>
+            <option value="🏷️ Other">🏷️ Other</option>
+          </select>
+        </div>
+        <div class="form-group flex-1">
+          <label for="entry-payment-select">Payment Method</label>
+          <select id="entry-payment-select" name="paymentMethod" class="select-input">
+            <option value="UPI / Online">UPI / Online</option>
+            <option value="Cash">Cash</option>
+            <option value="Card">Card</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="entry-note-input">Description / Note</label>
+        <input id="entry-note-input" name="note" maxlength="140" placeholder="e.g. Dinner split, Uber ride, Grocery bill" />
+      </div>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" data-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="entry-submit-btn">Save Entry</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- MODAL: Contact History & Statement -->
+  <dialog id="history-dialog" class="custom-dialog dialog-wide">
+    <div class="dialog-header">
+      <div>
+        <h2 id="history-name">Rahul Sharma</h2>
+        <p id="history-balance-badge" class="history-sub-badge"></p>
+      </div>
+      <button type="button" class="btn-close" data-close aria-label="Close dialog">×</button>
+    </div>
+
+    <div class="history-toolbar">
+      <div class="history-quick-btns">
+        <button type="button" class="btn btn-sm btn-receive" id="history-btn-gave">+ You Gave</button>
+        <button type="button" class="btn btn-sm btn-pay" id="history-btn-got">− You Got</button>
+        <button type="button" class="btn btn-sm btn-outline" id="history-btn-settle">Settle Balance</button>
+      </div>
+      <div class="history-manage-btns">
+        <button type="button" class="btn btn-sm btn-whatsapp" id="history-btn-whatsapp-statement" title="Share full transaction ledger on WhatsApp">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.495 2 2 6.495 2 12.031c0 1.977.571 3.826 1.558 5.39L2.25 21.75l4.47-1.282a9.972 9.972 0 0 0 5.311 1.563h.004c5.536 0 10.031-4.495 10.031-10.031 0-2.68-1.043-5.2-2.936-7.094A10.005 10.005 0 0 0 12.031 2zm5.836 14.286c-.244.685-1.42 1.258-1.956 1.341-.536.083-1.228.118-3.957-.962-3.486-1.38-5.748-4.943-5.922-5.176-.174-.233-1.417-1.884-1.417-3.593 0-1.708.896-2.551 1.214-2.9.318-.35.695-.437.927-.437.232 0 .463.002.666.012.215.01.503-.082.787.6.29.697.986 2.404 1.073 2.578.087.174.145.378.029.61-.116.233-.174.378-.348.581-.174.203-.367.454-.524.61-.174.174-.356.363-.153.712.203.349.905 1.492 1.943 2.417 1.334 1.189 2.458 1.558 2.807 1.732.348.174.551.145.755-.087.203-.232.87-1.016 1.103-1.365.232-.348.464-.29.784-.174.32.116 2.03 9.57 2.378 1.13.348.174.58.261.667.407.087.145.087.842-.157 1.527z"/></svg>
+          Share Statement
+        </button>
+        <button type="button" class="btn btn-sm btn-secondary" id="history-btn-remind">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Remind
+        </button>
+        <button type="button" class="btn btn-sm btn-secondary" id="history-btn-print">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Statement
+        </button>
+        <button type="button" class="btn btn-sm btn-secondary" id="history-btn-edit">Edit</button>
+        <button type="button" class="btn btn-sm btn-danger-outline" id="history-btn-delete">Delete</button>
+      </div>
+    </div>
+
+    <div class="history-list-wrapper">
+      <ul id="history-entries-list" class="history-items"></ul>
+    </div>
+  </dialog>
+
+  <!-- MODAL: Send WhatsApp & SMS Reminder -->
+  <dialog id="remind-dialog" class="custom-dialog">
+    <div class="dialog-header">
+      <div>
+        <h2>Notify & Send Reminder</h2>
+        <p class="field-hint" id="remind-target-info">To: Rahul (+91 9876543210)</p>
+      </div>
+      <button type="button" class="btn-close" data-close aria-label="Close dialog">×</button>
+    </div>
+
+    <div class="remind-body">
+      <!-- Direct Sending Status Banner -->
+      <div id="remind-direct-badge" class="direct-badge-box"></div>
+
+      <div class="template-selector">
+        <label>Reminder Tone / Style:</label>
+        <div class="template-chips">
+          <button type="button" class="temp-chip active" data-template="casual">Casual / Friendly</button>
+          <button type="button" class="temp-chip" data-template="polite">Polite & Formal</button>
+          <button type="button" class="temp-chip" data-template="itemized">Itemized Breakdown</button>
+          <button type="button" class="temp-chip" data-template="urgent">Urgent</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="remind-message-box">Message Preview (Editable):</label>
+        <textarea id="remind-message-box" rows="5"></textarea>
+      </div>
+
+      <!-- UPI QR Code & Direct Payment Link Section -->
+      <div class="upi-section" id="remind-upi-box">
+        <div class="upi-header">
+          <span>⚡ Direct UPI Payment</span>
+          <button type="button" class="btn-text" id="toggle-qr-view">Show QR Code</button>
+        </div>
+        <div id="qr-display-container" class="qr-container hidden">
+          <div id="qr-code-canvas"></div>
+          <p class="qr-hint">Scan with GPay, PhonePe, Paytm, or BHIM</p>
+        </div>
+      </div>
+
+      <div class="remind-actions">
+        <button type="button" class="btn btn-outline" id="btn-copy-reminder">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Text
+        </button>
+        <button type="button" class="btn btn-sms" id="btn-send-sms">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span id="btn-sms-text">SMS Message</span>
+        </button>
+        <button type="button" class="btn btn-whatsapp" id="btn-send-whatsapp">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.495 2 2 6.495 2 12.031c0 1.977.571 3.826 1.558 5.39L2.25 21.75l4.47-1.282a9.972 9.972 0 0 0 5.311 1.563h.004c5.536 0 10.031-4.495 10.031-10.031 0-2.68-1.043-5.2-2.936-7.094A10.005 10.005 0 0 0 12.031 2zm5.836 14.286c-.244.685-1.42 1.258-1.956 1.341-.536.083-1.228.118-3.957-.962-3.486-1.38-5.748-4.943-5.922-5.176-.174-.233-1.417-1.884-1.417-3.593 0-1.708.896-2.551 1.214-2.9.318-.35.695-.437.927-.437.232 0 .463.002.666.012.215.01.503-.082.787.6.29.697.986 2.404 1.073 2.578.087.174.145.378.029.61-.116.233-.174.378-.348.581-.174.203-.367.454-.524.61-.174.174-.356.363-.153.712.203.349.905 1.492 1.943 2.417 1.334 1.189 2.458 1.558 2.807 1.732.348.174.551.145.755-.087.203-.232.87-1.016 1.103-1.365.232-.348.464-.29.784-.174.32.116 2.03 9.57 2.378 1.13.348.174.58.261.667.407.087.145.087.842-.157 1.527z"/></svg>
+          <span id="btn-whatsapp-text">Send on WhatsApp</span>
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL: Desktop PC SMS Helper -->
+  <dialog id="desktop-sms-dialog" class="custom-dialog">
+    <div class="dialog-header">
+      <div>
+        <h2>Send SMS Message</h2>
+        <p class="field-hint" id="desktop-sms-info">To: Contact</p>
+      </div>
+      <button type="button" class="btn-close" data-close aria-label="Close dialog">×</button>
+    </div>
+    <div class="desktop-sms-body">
+      <div class="sms-info-banner">
+        <strong>ℹ️ Why wasn't SMS opening automatically?</strong>
+        <p>Windows PCs do not have built-in cellular SIM cards. On desktop, choose how you want to deliver this SMS:</p>
+      </div>
+
+      <div class="desktop-sms-actions">
+        <button type="button" class="btn btn-primary w-full" id="btn-open-phone-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          <span>Send via Windows Phone Link <small>(Connects to your Android/iPhone on PC)</small></span>
+        </button>
+        <button type="button" class="btn btn-secondary w-full" id="btn-open-google-messages">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Open Google Messages for Web <small>(Send SMS from PC via browser)</small></span>
+        </button>
+        <button type="button" class="btn btn-secondary w-full" id="btn-copy-sms-direct">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span>Copy SMS Text & Phone Number <small>(Paste in any chat or tool)</small></span>
+        </button>
+        <button type="button" class="btn btn-outline w-full" id="btn-setup-fast2sms-shortcut">
+          <span>⚡ Enable Free Fast2SMS Gateway <small>(Sends real SMS from PC without your phone)</small></span>
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL: Settings & Backup -->
+  <dialog id="settings-dialog" class="custom-dialog dialog-wide">
+    <div class="dialog-header">
+      <h2>App Settings</h2>
+      <button type="button" class="btn-close" data-close aria-label="Close dialog">×</button>
+    </div>
+    <form id="settings-form">
+      <!-- Settings Tabs -->
+      <div class="settings-subtabs">
+        <button type="button" class="settings-tab-btn active" data-subtab="subtab-general">General Profile</button>
+        <button type="button" class="settings-tab-btn" data-subtab="subtab-whatsapp">⚡ WhatsApp Direct Send</button>
+        <button type="button" class="settings-tab-btn" data-subtab="subtab-sms">💬 SMS Direct Send</button>
+        <button type="button" class="settings-tab-btn" data-subtab="subtab-backup">Backup & Demo</button>
+      </div>
+
+      <!-- SUBTAB 1: General Profile -->
+      <div id="subtab-general" class="settings-subtab-pane active">
+        <div class="form-group">
+          <label for="setting-your-name">Your Name (shown in reminder messages)</label>
+          <input id="setting-your-name" name="yourName" maxlength="40" placeholder="e.g. Rauna" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="setting-currency">Currency Symbol</label>
+            <input id="setting-currency" name="currency" maxlength="5" required placeholder="₹, $, €, £" />
+          </div>
+          <div class="form-group flex-1">
+            <label for="setting-country-code">Default Country Code</label>
+            <input id="setting-country-code" name="countryCode" inputmode="numeric" maxlength="4" required placeholder="91" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="setting-upi-id">Your UPI ID (Optional — for Indian payment links & QR)</label>
+          <input id="setting-upi-id" name="upiId" maxlength="60" placeholder="e.g. yourname@okaxis or 9876543210@paytm" />
+          <p class="field-hint">When provided, a fast payment link and QR code will be generated in WhatsApp reminders.</p>
+        </div>
+      </div>
+
+      <!-- SUBTAB 2: WhatsApp Direct Sending -->
+      <div id="subtab-whatsapp" class="settings-subtab-pane">
+        <div class="integration-card">
+          <div class="form-group">
+            <label for="setting-wa-mode">WhatsApp Sending Method:</label>
+            <select id="setting-wa-mode" name="whatsappMode" class="select-input">
+              <option value="app_direct">🔗 1-Click WhatsApp (Direct Chat — No Setup Needed)</option>
+              <option value="direct_greenapi">⚡ Direct WhatsApp in Background (via Green API — Free QR Scan)</option>
+              <option value="direct_ultramsg">⚡ Direct WhatsApp in Background (via UltraMsg)</option>
+              <option value="direct_custom">⚡ Custom Webhook / API URL</option>
+            </select>
+          </div>
+
+          <!-- Green API Fields -->
+          <div id="box-greenapi" class="gateway-fields-box">
+            <div class="helper-banner">
+              <strong>How to connect personal WhatsApp directly (Takes 1 minute):</strong>
+              <ol>
+                <li>Open <a href="https://green-api.com" target="_blank" rel="noopener">green-api.com</a> and create a free developer account.</li>
+                <li>Scan the displayed QR code with your phone (WhatsApp &gt; Linked Devices).</li>
+                <li>Copy your <strong>Instance ID</strong> and <strong>API Token</strong> into the fields below.</li>
+              </ol>
+              <p>Done! Messages will now be delivered <strong>directly to their WhatsApp in the background</strong> without opening WhatsApp on your screen!</p>
+            </div>
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="setting-greenapi-instance">Instance ID (idInstance)</label>
+                <input id="setting-greenapi-instance" name="greenApiInstance" placeholder="e.g. 7103859201" />
+              </div>
+              <div class="form-group flex-1">
+                <label for="setting-greenapi-token">API Token (apiTokenInstance)</label>
+                <input id="setting-greenapi-token" name="greenApiToken" type="password" placeholder="e.g. 1a2b3c4d5e..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- UltraMsg Fields -->
+          <div id="box-ultramsg" class="gateway-fields-box hidden">
+            <div class="helper-banner">
+              <p>Create an instance on <a href="https://ultramsg.com" target="_blank" rel="noopener">ultramsg.com</a>, scan QR, and paste credentials below:</p>
+            </div>
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="setting-ultramsg-instance">Instance ID</label>
+                <input id="setting-ultramsg-instance" name="ultraMsgInstance" placeholder="instance12345" />
+              </div>
+              <div class="form-group flex-1">
+                <label for="setting-ultramsg-token">Token</label>
+                <input id="setting-ultramsg-token" name="ultraMsgToken" type="password" placeholder="token..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom Webhook Fields -->
+          <div id="box-custom-wa" class="gateway-fields-box hidden">
+            <div class="form-group">
+              <label for="setting-wa-webhook">Webhook / API URL</label>
+              <input id="setting-wa-webhook" name="customWhatsappWebhook" placeholder="https://your-server.com/send-whatsapp" />
+              <p class="field-hint">Receives POST JSON: <code>{ phone: "919876543210", message: "text" }</code></p>
+            </div>
+          </div>
+
+          <div class="test-row">
+            <button type="button" class="btn btn-sm btn-outline" id="btn-test-whatsapp">
+              Test WhatsApp Connection
+            </button>
+            <span id="test-wa-status" class="test-status"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBTAB 3: SMS Direct Sending -->
+      <div id="subtab-sms" class="settings-subtab-pane">
+        <div class="integration-card">
+          <div class="form-group">
+            <label for="setting-sms-mode">SMS Sending Method:</label>
+            <select id="setting-sms-mode" name="smsMode" class="select-input">
+              <option value="device">📱 Device Native SMS / Google Messages Web</option>
+              <option value="fast2sms">⚡ Direct SMS via Fast2SMS (Free India SMS API)</option>
+              <option value="twilio">⚡ Direct SMS via Twilio (Worldwide)</option>
+            </select>
+          </div>
+
+          <!-- Fast2SMS Fields -->
+          <div id="box-fast2sms" class="gateway-fields-box hidden">
+            <div class="helper-banner">
+              <strong>Free Direct SMS in India (Fast2SMS):</strong>
+              <p>Sign up on <a href="https://www.fast2sms.com" target="_blank" rel="noopener">fast2sms.com</a>, grab your free API authorization key from Dev API, and paste below. Hisab will send real SMS straight from your computer!</p>
+            </div>
+            <div class="form-group">
+              <label for="setting-fast2sms-key">Fast2SMS Authorization API Key</label>
+              <input id="setting-fast2sms-key" name="fast2smsApiKey" type="password" placeholder="Paste Fast2SMS Key here" />
+            </div>
+          </div>
+
+          <!-- Twilio Fields -->
+          <div id="box-twilio" class="gateway-fields-box hidden">
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="setting-twilio-sid">Account SID</label>
+                <input id="setting-twilio-sid" name="twilioSid" placeholder="AC..." />
+              </div>
+              <div class="form-group flex-1">
+                <label for="setting-twilio-token">Auth Token</label>
+                <input id="setting-twilio-token" name="twilioToken" type="password" placeholder="Auth Token" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="setting-twilio-from">Twilio Phone Number</label>
+              <input id="setting-twilio-from" name="twilioFrom" placeholder="+1234567890" />
+            </div>
+          </div>
+
+          <div class="test-row">
+            <button type="button" class="btn btn-sm btn-outline" id="btn-test-sms">
+              Test SMS Connection
+            </button>
+            <span id="test-sms-status" class="test-status"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBTAB 4: Backup & Demo -->
+      <div id="subtab-backup" class="settings-subtab-pane">
+        <div class="settings-backup-box">
+          <h3>Backup & Data Management</h3>
+          <p class="field-hint">Your data is stored 100% locally on your browser. Export anytime to save a backup file.</p>
+          <div class="backup-actions">
+            <button type="button" class="btn btn-sm btn-secondary" id="btn-export-json">Export JSON Backup</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="btn-export-csv">Export CSV (Excel)</button>
+            <label class="btn btn-sm btn-outline file-btn">
+              Import Backup
+              <input id="btn-import-file" type="file" accept="application/json" hidden />
+            </label>
+            <button type="button" class="btn btn-sm btn-outline" id="btn-load-sample">Load Demo Data</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" data-close>Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Settings</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- MODAL: Manage Isolated Ledgers / User Profiles -->
+  <dialog id="ledger-manager-dialog" class="custom-dialog">
+    <div class="dialog-header">
+      <div>
+        <h2>Isolated Ledgers & Profiles</h2>
+        <p class="field-hint">Anyone on this device can create and switch to their own private ledger.</p>
+      </div>
+      <button type="button" class="btn-close" data-close aria-label="Close dialog">×</button>
+    </div>
+    <div class="ledger-manager-body">
+      <div id="ledgers-list" class="ledgers-list"></div>
+      <div class="ledger-manager-actions">
+        <button type="button" class="btn btn-primary w-full" id="btn-open-create-ledger">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Create New Isolated Ledger
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL: Create New Isolated Ledger -->
+  <dialog id="create-ledger-dialog" class="custom-dialog">
+    <div class="dialog-header">
+      <h2>Create Isolated Ledger</h2>
+      <button type="button" class="btn-close" data-close aria-label="Close dialog">×</button>
+    </div>
+    <form id="create-ledger-form">
+      <div class="form-group">
+        <label for="new-ledger-name">Ledger Name <span class="req">*</span></label>
+        <input id="new-ledger-name" name="name" required maxlength="40" placeholder="e.g. Flatmates, Goa Trip, Shop Khata, Rahul" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label for="new-ledger-icon">Icon / Emoji</label>
+          <select id="new-ledger-icon" name="icon" class="select-input">
+            <option value="👤">👤 Personal / Me</option>
+            <option value="🏠">🏠 Flatmates / Home</option>
+            <option value="💼">💼 Business / Work</option>
+            <option value="✈️">✈️ Trip / Vacation</option>
+            <option value="🛒">🛒 Groceries / Shop</option>
+            <option value="🎉">🎉 Events / Party</option>
+            <option value="🎓">🎓 College / Study</option>
+          </select>
+        </div>
+        <div class="form-group flex-1">
+          <label for="new-ledger-currency">Currency Symbol</label>
+          <input id="new-ledger-currency" name="currency" required maxlength="5" value="₹" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="new-ledger-pin">Security PIN (Optional — 4 digits to lock)</label>
+        <input id="new-ledger-pin" name="pin" type="password" inputmode="numeric" maxlength="4" placeholder="Leave empty for no lock" />
+        <p class="field-hint">If set, switching to this ledger will require entering this 4-digit PIN.</p>
+      </div>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" data-close>Cancel</button>
+        <button type="submit" class="btn btn-primary">Create & Switch</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- MODAL: Security PIN Prompt -->
+  <dialog id="pin-prompt-dialog" class="custom-dialog custom-dialog-sm">
+    <div class="dialog-header">
+      <div>
+        <h2>🔒 Locked Ledger</h2>
+        <p class="field-hint" id="pin-prompt-ledger-name">Enter PIN to access</p>
+      </div>
+      <button type="button" class="btn-close" data-close aria-label="Close dialog">×</button>
+    </div>
+    <form id="pin-prompt-form">
+      <div class="form-group text-center">
+        <label for="pin-input-field">Enter 4-Digit Security PIN</label>
+        <input id="pin-input-field" type="password" inputmode="numeric" maxlength="4" required class="pin-code-input" placeholder="••••" autofocus />
+        <p id="pin-error-msg" class="field-hint error-text hidden">Incorrect PIN. Please try again.</p>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" data-close>Cancel</button>
+        <button type="submit" class="btn btn-primary">Unlock</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- MODAL: Install App Instructions -->
+  <dialog id="install-info-dialog" class="custom-dialog">
+    <div class="dialog-header">
+      <div>
+        <h2>📲 Install Hisab App</h2>
+        <p class="field-hint">Install on your phone or PC for full offline access</p>
+      </div>
+      <button type="button" class="btn-close" data-close aria-label="Close dialog">×</button>
+    </div>
+    <div class="install-info-body">
+      <div class="install-guide-card">
+        <div class="guide-platform">
+          <strong>🤖 Android (Google Chrome)</strong>
+          <p>Tap the <strong>three dots (⋮)</strong> at top right $\rightarrow$ tap <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</p>
+        </div>
+        <div class="guide-platform">
+          <strong>🍎 iPhone / iPad (Safari)</strong>
+          <p>Tap the <strong>Share button</strong> (square with arrow $\uparrow$) at the bottom $\rightarrow$ tap <strong>"Add to Home Screen"</strong>.</p>
+        </div>
+        <div class="guide-platform">
+          <strong>💻 Windows / Mac (Chrome & Edge)</strong>
+          <p>Click the <strong>Install App icon</strong> on the right side of your browser address bar.</p>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-primary" data-close>Got it</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Printable Statement Section (Clean for printing or PDF save) -->
+  <div id="print-statement" class="print-only"></div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast-notification" role="status" aria-live="polite"></div>
+
+  <script src="qr.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
