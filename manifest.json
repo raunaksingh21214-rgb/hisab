@@ -1,6 +1,6 @@
 {
   "name": "Hisab — Money & Expense Tracker",
-  "short_name": "Hisab",
+  "short_name": "UdharSetu",
   "id": "hisab-pwa-app",
   "description": "Track give & take, log expenses, and send WhatsApp/SMS payment reminders",
   "start_url": "./index.html",
