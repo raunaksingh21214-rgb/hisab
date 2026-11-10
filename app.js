@@ -808,11 +808,11 @@ function buildReminderMessage(person, templateStyle = "casual") {
 
   if (balance > 0.009) {
     if (templateStyle === "casual") {
-      message = `Hey ${personName}! Quick friendly reminder about ${formattedAmt} pending with you. Whenever you get a moment, please send it over. Thanks! 🙌${fromTag}\n\nTrack records on Hisab: https://hisaba.netlify.app`;
+      message = `Hey ${personName}! Quick friendly reminder about ${formattedAmt} pending with you. Whenever you get a moment, please send it over. Thanks! 🙌${fromTag}\n\nTrack on Hisab: https://hisaba.netlify.app`;
     } else if (templateStyle === "polite") {
-      message = `Dear ${person.name}, this is a gentle reminder regarding the outstanding balance of ${formattedAmt}. Kindly settle this when convenient. Regards {fromTag}\nHisab App: https://hisaba.netlify.app`;
+      message = `Dear ${person.name}, this is a gentle reminder regarding the outstanding balance of ${formattedAmt}. Kindly settle this when convenient.\n\nRegards${fromTag}\nHisab App: https://hisaba.netlify.app`;
     } else if (templateStyle === "urgent") {
-      message = `Hi ${personName}, please settle the pending dues of ${formattedAmt} today if possible. Thank you https://hisaba.netlify.app${fromTag}!\n\nHisab App: https://hisaba.netlify.app`;
+      message = `Hi ${personName}, please settle the pending dues of ${formattedAmt} today if possible. Thank you${fromTag}!\n\nHisab App: https://hisaba.netlify.app`;
     } else if (templateStyle === "itemized") {
       const recent = state.entries
         .filter((e) => e.personId === person.id && e.direction === "gave")
@@ -820,16 +820,16 @@ function buildReminderMessage(person, templateStyle = "casual") {
         .map((e) => `• ${formatMoney(e.amount)} (${e.note || e.category})`)
         .join("\n");
 
-      message = `Hi ${personName}, your total pending balance is ${formattedAmt}.\n${recent ? `Recent items:\n${recent}\n` : ""}Please transfer when you can. Thank you https://hisaba.netlify.app${fromTag}!`;
+      message = `Hi ${personName}, your total pending balance is ${formattedAmt}.\n${recent ? `Recent items:\n${recent}\n` : ""}Please transfer when you can. Thank you${fromTag}!\n\nHisab App: https://hisaba.netlify.app`;
     }
 
     if (upiId) {
       message += `\n\n⚡ Pay directly via UPI: ${upiId}`;
     }
   } else if (balance < -0.009) {
-    message = `Hi ${personName}, just keeping you posted that I have to give you ${formattedAmt}. I will settle it with you shortly!${fromTag}`;
+    message = `Hi ${personName}, just keeping you posted that I have to give you ${formattedAmt}. I will settle it with you shortly!${fromTag}\n\nHisab App: https://hisaba.netlify.app`;
   } else {
-    message = `Hi ${personName}, our accounts are completely settled up (${formatMoney(0)}). Thanks!${fromTag}`;
+    message = `Hi ${personName}, our accounts are completely settled up (${formatMoney(0)}). Thanks!${fromTag}\n\nHisab App: https://hisaba.netlify.app`;
   }
 
   return message;
@@ -2215,12 +2215,27 @@ if (pinPromptForm) {
 // PWA INSTALL — Event Listeners
 // ----------------------------------------------------
 
+// Check if app is running in installed standalone mode
+function isStandalone() {
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+
+function updateInstallButtonVisibility() {
+  const installBtn = $("#btn-install-app");
+  if (!installBtn) return;
+  if (isStandalone()) {
+    installBtn.style.display = "none";
+  }
+}
+
 // Capture install prompt before it fires
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPwaPrompt = e;
   const installBtn = $("#btn-install-app");
-  if (installBtn) installBtn.style.display = ""; // show if was hidden
+  if (installBtn && !isStandalone()) {
+    installBtn.style.display = ""; // show if was hidden
+  }
 });
 
 // Install button clicked
@@ -2233,6 +2248,7 @@ if (btnInstallApp) {
       if (outcome === "accepted") {
         showToast("App installed! Find it on your home screen.");
         deferredPwaPrompt = null;
+        btnInstallApp.style.display = "none";
       }
     } else {
       openModal($("#install-info-dialog"));
@@ -2243,8 +2259,13 @@ if (btnInstallApp) {
 // When app is installed (standalone)
 window.addEventListener("appinstalled", () => {
   deferredPwaPrompt = null;
+  const installBtn = $("#btn-install-app");
+  if (installBtn) installBtn.style.display = "none";
   showToast("Hisab App installed successfully!");
 });
+
+// Initial standalone check
+updateInstallButtonVisibility();
 
 // ----------------------------------------------------
 // SERVICE WORKER REGISTRATION
